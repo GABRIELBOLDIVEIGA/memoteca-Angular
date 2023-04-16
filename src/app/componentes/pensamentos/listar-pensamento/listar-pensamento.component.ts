@@ -10,12 +10,37 @@ import { PensamentoService } from '../pensamento.service';
 export class ListarPensamentoComponent implements OnInit {
   listaPensamentos: Pensamento[] = [];
   paginaAtual: number = 1;
+  haMaisPensamentos: boolean = true;
+  filtro: string = '';
 
   constructor(private service: PensamentoService) {}
 
   ngOnInit(): void {
-    this.service.listar(this.paginaAtual).subscribe((listaPensamentos) => {
-      this.listaPensamentos = listaPensamentos;
-    })
+    this.service
+      .listar(this.paginaAtual, this.filtro)
+      .subscribe((listaPensamentos) => {
+        this.listaPensamentos = listaPensamentos;
+      });
+  }
+
+  carregarMaisPensamentos() {
+    console.log('carregar mais...');
+    this.service
+      .listar(++this.paginaAtual, this.filtro)
+      .subscribe((listaPensamentos) => {
+        this.listaPensamentos.push(...listaPensamentos);
+        if (this.listaPensamentos.length) {
+          this.haMaisPensamentos = false;
+        }
+      });
+  }
+
+  pesquisarPensamentos() {
+    this.haMaisPensamentos = true;
+    this.service
+      .listar(this.paginaAtual, this.filtro)
+      .subscribe((listaPensamentos) => {
+        this.listaPensamentos = listaPensamentos;
+      });
   }
 }
