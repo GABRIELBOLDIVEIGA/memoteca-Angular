@@ -24,15 +24,13 @@ export class ListarPensamentoComponent implements OnInit {
   }
 
   carregarMaisPensamentos() {
-    console.log('carregar mais...');
-    this.service
-      .listar(++this.paginaAtual, this.filtro)
-      .subscribe((listaPensamentos) => {
+    this.service.listar(++this.paginaAtual, this.filtro)
+      .subscribe(listaPensamentos => {
         this.listaPensamentos.push(...listaPensamentos);
-        if (this.listaPensamentos.length) {
-          this.haMaisPensamentos = false;
+        if(!listaPensamentos.length) {
+          this.haMaisPensamentos = false
         }
-      });
+      })
   }
 
   pesquisarPensamentos() {
